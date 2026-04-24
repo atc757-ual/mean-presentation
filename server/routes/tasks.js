@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
 
-// Get all tasks
+// GET: Fetch all tasks
 router.get('/', async (req, res) => {
   try {
     const tasks = await Task.find().sort({ createdAt: -1 });
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a task
+// POST: Create a new task
 router.post('/', async (req, res) => {
   try {
     const task = new Task({
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Toggle task status
+// PATCH: Toggle completion status
 router.patch('/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -42,7 +42,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-// Delete a task
+// DELETE: Remove a task
 router.delete('/:id', async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);

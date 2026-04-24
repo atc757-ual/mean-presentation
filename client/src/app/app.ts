@@ -25,13 +25,18 @@ export class App implements OnInit {
   newTaskTitle = '';
   newTaskDesc = '';
 
+  // Modal state
+  showModal = false;
+  taskToDelete: Task | null = null;
+
   ngOnInit() {
-    this.loadTasks();
+    this.getTasks();
   }
 
-  loadTasks() {
-    this.http.get<Task[]>(this.apiUrl).subscribe(data => {
-      this.tasks = data;
+  getTasks() {
+    this.http.get<Task[]>(this.apiUrl).subscribe({
+      next: (data) => this.tasks = data,
+      error: (err) => console.error('Error fetching tasks', err)
     });
   }
 
@@ -44,22 +49,41 @@ export class App implements OnInit {
       completed: false
     };
 
-    this.http.post<Task>(this.apiUrl, task).subscribe(newTask => {
-      this.tasks.unshift(newTask);
-      this.newTaskTitle = '';
-      this.newTaskDesc = '';
+    this.http.post<Task>(this.apiUrl, task).subscribe({
+      next: (newTask) => {
+        this.tasks.unshift(newTask);
+        this.newTaskTitle = '';
+        this.newTaskDesc = '';
+      },
+      error: (err) => console.error('Error adding task', err)
     });
   }
 
   toggleTask(task: Task) {
-    this.http.patch<Task>(`${this.apiUrl}/${task._id}`, {}).subscribe(updated => {
-      task.completed = updated.completed;
+    this.http.patch<Task>(`${this.apiUrl}/${task._id}`, {}).subscribe({
+      next: (updated) => task.completed = updated.completed,
+      error: (err) => console.error('Error updating task', err)
     });
   }
 
-  deleteTask(task: Task) {
-    this.http.delete(`${this.apiUrl}/${task._id}`).subscribe(() => {
-      this.tasks = this.tasks.filter(t => t._id !== task._id);
+  confirmDelete(task: Task) {
+    this.taskToDelete = task;
+    this.showModal = true;
+  }
+
+  deleteTask() {
+    if (!this.taskToDelete) return;
+    
+    this.http.delete(`${this.apiUrl}/${this.taskToDelete._id}`).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter(t => t._id !== this.taskToDelete?._id);
+        this.showModal = false;
+        this.taskToDelete = null;
+      },
+      error: (err) => {
+        console.error('Error deleting task', err);
+        this.showModal = false;
+      }
     });
   }
 }

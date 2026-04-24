@@ -10,40 +10,39 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Database Connection
+// MongoDB Connection
 const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27018/presentation-db';
 mongoose.connect(mongoURI)
   .then(async () => {
-    console.log('✅ MongoDB Connected on Port 27018');
+    console.log('Connected to MongoDB');
     
-    // Seed initial data if empty (Presentation logic)
+    // Seed data if collection is empty
     const Task = require('./server/models/Task');
     const count = await Task.countDocuments();
     if (count === 0) {
       await Task.create([
-        { title: '🚀 Configurar Proyecto MEAN', description: 'Instalar dependencias y configurar servidor.', completed: true },
-        { title: '💻 Desarrollar API REST', description: 'Crear rutas de Express y modelos de Mongoose.', completed: true },
-        { title: '🎨 Diseñar Frontend', description: 'Implementar UI premium con Angular y Glassmorphism.', completed: false }
+        { title: 'Configurar Proyecto MEAN', description: 'Instalar dependencias y configurar servidor.', completed: true },
+        { title: 'Desarrollar API REST', description: 'Crear rutas de Express y modelos de Mongoose.', completed: true },
+        { title: 'Diseñar Frontend', description: 'Implementar UI premium con Angular y Glassmorphism.', completed: false }
       ]);
-      console.log('🌱 Seed: Tareas de ejemplo insertadas');
+      console.log('Initial data seeded');
     }
   })
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+  .catch(err => console.error('Connection error:', err));
 
-// Routes
+// API Routes
 app.use('/api/tasks', require('./server/routes/tasks'));
 
-// Root route
 app.get('/', (req, res) => {
-  res.send('MEAN Presentation API is running...');
+  res.send('API is running');
 });
 
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
-  console.error('❌ Internal Error:', err.stack);
-  res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
