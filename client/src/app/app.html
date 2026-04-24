@@ -1,0 +1,79 @@
+<main style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+  <!-- Header -->
+  <header style="margin-bottom: 3rem; text-align: center;">
+    <h1 style="font-size: 3.5rem; background: linear-gradient(to right, #8b5cf6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      Smart Tasks
+    </h1>
+    <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 1.1rem;">
+      Full Stack MEAN Application
+    </p>
+  </header>
+
+  <!-- Create Task Section -->
+  <section class="glass" style="padding: 2rem; margin-bottom: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <input 
+        [(ngModel)]="newTaskTitle" 
+        placeholder="¿Qué tienes en mente?" 
+        style="background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.5rem; padding: 0.5rem 0; outline: none;"
+      >
+      <input 
+        [(ngModel)]="newTaskDesc" 
+        placeholder="Añade una descripción (opcional)" 
+        style="background: transparent; border: none; color: var(--text-secondary); padding: 0.5rem 0; outline: none;"
+      >
+      <button 
+        (click)="addTask()"
+        style="margin-top: 1rem; padding: 1rem; border-radius: 12px; border: none; background: linear-gradient(to right, #8b5cf6, #7c3aed); color: white; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);"
+      >
+        Añadir Tarea
+      </button>
+    </div>
+  </section>
+
+  <!-- Task List -->
+  <section style="display: flex; flex-direction: column; gap: 1rem;">
+    @for (task of tasks; track task._id) {
+      <div class="glass" style="padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease;">
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+          <div 
+            (click)="toggleTask(task)"
+            [style.background]="task.completed ? 'linear-gradient(to right, #06b6d4, #0891b2)' : 'rgba(255,255,255,0.1)'"
+            style="width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2);"
+          >
+            @if (task.completed) {
+              <span style="font-size: 14px;">✓</span>
+            }
+          </div>
+          <div>
+            <h3 [style.text-decoration]="task.completed ? 'line-through' : 'none'" [style.color]="task.completed ? 'var(--text-secondary)' : 'white'">
+              {{ task.title }}
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">{{ task.description }}</p>
+          </div>
+        </div>
+        
+        <button 
+          (click)="deleteTask(task)"
+          style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem;"
+        >
+          Eliminar
+        </button>
+      </div>
+    } @empty {
+      <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+        No hay tareas pendientes. ¡Empieza creando una!
+      </div>
+    }
+  </section>
+
+  <!-- Footer Info for Presentation -->
+  <footer style="margin-top: 4rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+    <div style="display: flex; justify-content: center; gap: 2rem; font-size: 0.8rem; color: var(--text-secondary);">
+      <span>MongoDB</span>
+      <span>Express</span>
+      <span>Angular</span>
+      <span>Node.js</span>
+    </div>
+  </footer>
+</main>
