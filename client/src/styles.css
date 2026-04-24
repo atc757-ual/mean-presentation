@@ -153,16 +153,32 @@ button:disabled {
   opacity: 0.5;
 }
 
-.delete-btn {
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
   background: transparent;
   color: var(--text-muted);
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.delete-btn:hover {
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.action-btn.edit:hover {
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.action-btn.delete:hover {
   color: var(--danger);
   background: rgba(239, 68, 68, 0.1);
-  transform: none;
 }
 
 /* Modal Styles */

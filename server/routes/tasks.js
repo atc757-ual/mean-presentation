@@ -26,12 +26,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PATCH: Toggle completion status
+// PATCH: Update a task (Toggle or Edit content)
 router.patch('/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (task) {
-      task.completed = !task.completed;
+      // If body has title/description, it's an edit; if not, it's a toggle
+      if (req.body.title !== undefined) task.title = req.body.title;
+      if (req.body.description !== undefined) task.description = req.body.description;
+      if (req.body.completed !== undefined) task.completed = req.body.completed;
+      else if (req.body.title === undefined) task.completed = !task.completed;
+
       const updatedTask = await task.save();
       res.json(updatedTask);
     } else {

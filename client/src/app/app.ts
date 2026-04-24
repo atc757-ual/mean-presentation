@@ -22,12 +22,20 @@ export class App implements OnInit {
   private apiUrl = 'http://localhost:3000/api/tasks';
 
   tasks: Task[] = [];
+  
+  // Create state
   newTaskTitle = '';
   newTaskDesc = '';
 
-  // UI State
-  showModal = false;
+  // Edit state
+  isEditing = false;
+  editingTask: Task | null = null;
+
+  // Delete modal state
+  showDeleteModal = false;
   taskToDelete: Task | null = null;
+
+  // Toast state
   toast = { show: false, message: '', isError: false };
 
   ngOnInit() {
@@ -66,6 +74,30 @@ export class App implements OnInit {
     });
   }
 
+  startEdit(task: Task) {
+    this.isEditing = true;
+    this.editingTask = { ...task }; // Clone to avoid direct mutation
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.editingTask = null;
+  }
+
+  updateTask() {
+    if (!this.editingTask || !this.editingTask.title.trim()) return;
+
+    this.http.patch<Task>(`${this.apiUrl}/${this.editingTask._id}`, this.editingTask).subscribe({
+      next: (updated) => {
+        const index = this.tasks.findIndex(t => t._id === updated._id);
+        if (index !== -1) this.tasks[index] = updated;
+        this.cancelEdit();
+        this.showToast('Tarea actualizada');
+      },
+      error: () => this.showToast('Error al actualizar tarea', true)
+    });
+  }
+
   toggleTask(task: Task) {
     this.http.patch<Task>(`${this.apiUrl}/${task._id}`, {}).subscribe({
       next: (updated) => {
@@ -78,7 +110,7 @@ export class App implements OnInit {
 
   confirmDelete(task: Task) {
     this.taskToDelete = task;
-    this.showModal = true;
+    this.showDeleteModal = true;
   }
 
   deleteTask() {
@@ -87,13 +119,13 @@ export class App implements OnInit {
     this.http.delete(`${this.apiUrl}/${this.taskToDelete._id}`).subscribe({
       next: () => {
         this.tasks = this.tasks.filter(t => t._id !== this.taskToDelete?._id);
-        this.showModal = false;
+        this.showDeleteModal = false;
         this.taskToDelete = null;
         this.showToast('Tarea eliminada');
       },
       error: () => {
         this.showToast('Error al eliminar la tarea', true);
-        this.showModal = false;
+        this.showDeleteModal = false;
       }
     });
   }

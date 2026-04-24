@@ -27,23 +27,45 @@
             <p>{{ task.description }}</p>
           </div>
         </div>
-        <button class="delete-btn" (click)="confirmDelete(task)">
-          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/></svg>
-        </button>
+        <div class="task-actions">
+          <button class="action-btn edit" (click)="startEdit(task)">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/></svg>
+          </button>
+          <button class="action-btn delete" (click)="confirmDelete(task)">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/></svg>
+          </button>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Modal de Confirmación -->
-  <div class="modal-overlay" *ngIf="showModal">
+  <!-- Modal de Edición -->
+  <div class="modal-overlay" *ngIf="isEditing">
+    <div class="modal card">
+      <h2>Editar Tarea</h2>
+      <div class="form-group" *ngIf="editingTask">
+        <input type="text" [(ngModel)]="editingTask.title" placeholder="Título">
+        <textarea [(ngModel)]="editingTask.description" placeholder="Descripción"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" (click)="cancelEdit()">Cancelar</button>
+        <button (click)="updateTask()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación Eliminación -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal card">
       <h2>Confirmar eliminación</h2>
       <p>¿Estás seguro de que quieres eliminar la tarea "<strong>{{ taskToDelete?.title }}</strong>"?</p>
       <div class="modal-actions">
-        <button class="secondary" (click)="showModal = false">Cancelar</button>
+        <button class="secondary" (click)="showDeleteModal = false">Cancelar</button>
         <button class="danger" (click)="deleteTask()">Eliminar</button>
       </div>
     </div>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast" *ngIf="toast.show" [class.error]="toast.isError">
     {{ toast.message }}
