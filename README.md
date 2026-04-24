@@ -1,12 +1,14 @@
-# 🚀 MEAN Stack Task Manager (Containerized)
+# 🚀 MEAN Stack Presentation: Gestor de Tareas Premium
 
-![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-4ea94b?style=for-the-badge&logo=mongodb&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+[![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031?logo=angular&logoColor=white)](https://angular.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
-Este proyecto consiste en el desarrollo y despliegue de una aplicación web de alto nivel utilizando la pila **MEAN** (MongoDB, Express, Angular y Node.js), implementando un desarrollo **Full Stack** unificado mediante JavaScript y TypeScript en todas sus capas.
+![App Preview](screenshots/app_preview.png)
+
+## 📋 Descripción
+Este proyecto es una aplicación **Full Stack** completa diseñada para una presentación profesional. Permite la gestión de tareas (CRUD) con una interfaz moderna y un despliegue orquestado mediante Docker.
 
 ---
 

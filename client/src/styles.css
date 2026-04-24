@@ -215,6 +215,7 @@ button:disabled {
 .modal-actions {
   display: flex;
   gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .modal-actions button {
