@@ -25,9 +25,10 @@ export class App implements OnInit {
   newTaskTitle = '';
   newTaskDesc = '';
 
-  // Modal state
+  // UI State
   showModal = false;
   taskToDelete: Task | null = null;
+  toast = { show: false, message: '', isError: false };
 
   ngOnInit() {
     this.getTasks();
@@ -36,8 +37,13 @@ export class App implements OnInit {
   getTasks() {
     this.http.get<Task[]>(this.apiUrl).subscribe({
       next: (data) => this.tasks = data,
-      error: (err) => console.error('Error fetching tasks', err)
+      error: () => this.showToast('Error al cargar tareas', true)
     });
+  }
+
+  showToast(message: string, isError = false) {
+    this.toast = { show: true, message, isError };
+    setTimeout(() => this.toast.show = false, 3000);
   }
 
   addTask() {
@@ -54,15 +60,19 @@ export class App implements OnInit {
         this.tasks.unshift(newTask);
         this.newTaskTitle = '';
         this.newTaskDesc = '';
+        this.showToast('Tarea añadida con éxito');
       },
-      error: (err) => console.error('Error adding task', err)
+      error: () => this.showToast('Error al crear la tarea', true)
     });
   }
 
   toggleTask(task: Task) {
     this.http.patch<Task>(`${this.apiUrl}/${task._id}`, {}).subscribe({
-      next: (updated) => task.completed = updated.completed,
-      error: (err) => console.error('Error updating task', err)
+      next: (updated) => {
+        task.completed = updated.completed;
+        this.showToast(task.completed ? 'Tarea completada' : 'Tarea pendiente');
+      },
+      error: () => this.showToast('Error al actualizar tarea', true)
     });
   }
 
@@ -79,9 +89,10 @@ export class App implements OnInit {
         this.tasks = this.tasks.filter(t => t._id !== this.taskToDelete?._id);
         this.showModal = false;
         this.taskToDelete = null;
+        this.showToast('Tarea eliminada');
       },
-      error: (err) => {
-        console.error('Error deleting task', err);
+      error: () => {
+        this.showToast('Error al eliminar la tarea', true);
         this.showModal = false;
       }
     });

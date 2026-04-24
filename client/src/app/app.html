@@ -44,5 +44,8 @@
         <button class="danger" (click)="deleteTask()">Eliminar</button>
       </div>
     </div>
+  <!-- Toast Notification -->
+  <div class="toast" *ngIf="toast.show" [class.error]="toast.isError">
+    {{ toast.message }}
   </div>
 </div>
