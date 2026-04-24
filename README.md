@@ -63,5 +63,13 @@ El usuario interactúa con la interfaz de Angular enviando solicitudes al servid
 
 ---
 
+## 👤 Autor
+Este proyecto ha sido desarrollado íntegramente por:
+*   **Nombre:** Alex (atc757)
+*   **Email:** [atc757@inlumine.ual.es](mailto:atc757@inlumine.ual.es)
+*   **Institución:** Universidad de Almería (UAL)
+
+---
+
 ## 📝 Licencia
 Este proyecto está bajo la Licencia MIT. ¡Siéntete libre de usarlo para tus propias presentaciones! 🚀
